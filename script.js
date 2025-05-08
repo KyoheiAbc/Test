@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -63,9 +62,14 @@ class Object {
 
 let FPS = 60;
 let pause = false;
+let logMessages = [];
 
-
-
+function logToScreen(message) {
+    const logDiv = document.getElementById("log");
+    logMessages.push(message);
+    if (logMessages.length > 10) logMessages.shift(); // 最大10件まで表示
+    logDiv.innerHTML = logMessages.join("<br>");
+}
 
 addEventListener("mousedown", (e) => {
     Objects.push(new Object(e.clientX, e.clientY));
@@ -113,8 +117,7 @@ function gameLoop() {
     const fps = 1000 / (now - this.lastTime);
     this.lastTime = now;
     if (!this.lastLogTime || now - this.lastLogTime >= 1000) {
-        console.log(`FPS: ${fps.toFixed(2)}`);
-        console.log(`Objects: ${Objects.length}`);
+        logToScreen(`FPS: ${fps.toFixed(2)}\nObjects: ${Objects.length}`);
         this.lastLogTime = now;
     }
 
